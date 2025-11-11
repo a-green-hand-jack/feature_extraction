@@ -1,0 +1,132 @@
+[
+  {
+    "dataset": "US9624268_cleaned",
+    "success": true,
+    "summary": {
+      "dataset_name": "US9624268_cleaned",
+      "csv_file": "US9624268_cleaned.csv",
+      "total_rows": 775,
+      "valid_rows_sif": 130,
+      "valid_rows_sgf": 90,
+      "missing_values": {
+        "sif": 645,
+        "sgf": 685
+      },
+      "sif_distribution": {
+        "1": {
+          "count": 49,
+          "percentage": 37.69,
+          "label": ">360 min"
+        },
+        "2": {
+          "count": 27,
+          "percentage": 20.77,
+          "label": "180-360 min"
+        },
+        "3": {
+          "count": 16,
+          "percentage": 12.31,
+          "label": "120-180 min"
+        },
+        "4": {
+          "count": 10,
+          "percentage": 7.69,
+          "label": "60-120 min"
+        },
+        "5": {
+          "count": 28,
+          "percentage": 21.54,
+          "label": "<60 min"
+        }
+      },
+      "sgf_distribution": {
+        "1": {
+          "count": 37,
+          "percentage": 41.11,
+          "label": ">360 min"
+        },
+        "2": {
+          "count": 15,
+          "percentage": 16.67,
+          "label": "180-360 min"
+        },
+        "3": {
+          "count": 12,
+          "percentage": 13.33,
+          "label": "120-180 min"
+        },
+        "4": {
+          "count": 4,
+          "percentage": 4.44,
+          "label": "60-120 min"
+        },
+        "5": {
+          "count": 22,
+          "percentage": 24.44,
+          "label": "<60 min"
+        }
+      },
+      "mapping_description": "US9624268"
+    }
+  },
+  {
+    "dataset": "sif_sgf_second_cleaned",
+    "success": true,
+    "summary": {
+      "dataset_name": "sif_sgf_second_cleaned",
+      "csv_file": "sif_sgf_second_cleaned.csv",
+      "total_rows": 897,
+      "valid_rows_sif": 558,
+      "valid_rows_sgf": 558,
+      "missing_values": {
+        "sif": 339,
+        "sgf": 339
+      },
+      "sif_distribution": {
+        "1": {
+          "count": 150,
+          "percentage": 26.88,
+          "label": "<1 hour"
+        },
+        "2": {
+          "count": 16,
+          "percentage": 2.87,
+          "label": "1-1.5 hours"
+        },
+        "3": {
+          "count": 31,
+          "percentage": 5.56,
+          "label": "1.5-2 hours"
+        },
+        "4": {
+          "count": 361,
+          "percentage": 64.7,
+          "label": ">2 hours"
+        }
+      },
+      "sgf_distribution": {
+        "1": {
+          "count": 244,
+          "percentage": 43.73,
+          "label": "<1 hour"
+        },
+        "2": {
+          "count": 25,
+          "percentage": 4.48,
+          "label": "1-1.5 hours"
+        },
+        "3": {
+          "count": 20,
+          "percentage": 3.58,
+          "label": "1.5-2 hours"
+        },
+        "4": {
+          "count": 269,
+          "percentage": 48.21,
+          "label": ">2 hours"
+        }
+      },
+      "mapping_description": "SIF/SGF Second"
+    }
+  }
+]
