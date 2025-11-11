@@ -45,6 +45,7 @@ class DataVisualizer:
         feature_names: np.ndarray,
         dataset_name: str = "Dataset",
         dpi: int = 300,
+        ids: Optional[np.ndarray] = None,
     ) -> None:
         """
         初始化数据可视化器。
@@ -56,6 +57,7 @@ class DataVisualizer:
             feature_names (np.ndarray): 特征名称。
             dataset_name (str): 数据集名称。默认 "Dataset"。
             dpi (int): 图像分辨率。默认 300。
+            ids (Optional[np.ndarray]): 样本 ID 数组。默认 None。
         """
         self.X = X
         self.y_sif = y_sif
@@ -63,6 +65,7 @@ class DataVisualizer:
         self.feature_names = feature_names
         self.dataset_name = dataset_name
         self.dpi = dpi
+        self.ids = ids if ids is not None else np.arange(len(X), dtype=object)
 
         # 创建数据框
         self.df_data = pd.DataFrame(
@@ -70,6 +73,7 @@ class DataVisualizer:
         )
         self.df_data['SIF_class'] = self.y_sif
         self.df_data['SGF_class'] = self.y_sgf
+        self.df_data['id'] = self.ids
 
         logger.info(
             f"初始化 DataVisualizer: {dataset_name}, "
@@ -184,7 +188,7 @@ class DataVisualizer:
         """
         绘制稳定性标签分布图。
 
-        生成两个图：SIF/SGF 标签计数柱状图和联合分布热力图。
+        生成两个图：SIF/SGF 标签计数柱状图（过滤掉 -1）和联合分布热力图（包含 -1 作为缺失类别）。
 
         Args:
             output_dir (Path): 输出目录。
@@ -195,32 +199,38 @@ class DataVisualizer:
         """
         output_paths = []
 
-        # 1. 标签计数柱状图
+        # 1. 标签计数柱状图 - 过滤掉 -1（缺失值）
         fig, axes = plt.subplots(1, 2, figsize=(12, 5))
         fig.suptitle(
             f"Stability Label Distribution - {self.dataset_name}",
             fontsize=14, fontweight='bold'
         )
 
-        # SIF 分布 - 使用 unique 获取实际存在的标签
-        sif_unique, sif_counts = np.unique(self.y_sif.astype(int), return_counts=True)
+        # SIF 分布 - 过滤掉 -1，只计算有效标签
+        sif_valid = self.y_sif[self.y_sif != -1]
+        sif_unique, sif_counts = np.unique(sif_valid.astype(int), return_counts=True)
         axes[0].bar(sif_unique, sif_counts, color='steelblue',
                    edgecolor='black', alpha=0.7)
         axes[0].set_xlabel('SIF Stability Class')
         axes[0].set_ylabel('Count')
-        axes[0].set_title('SIF Distribution')
+        sif_missing = np.sum(self.y_sif == -1)
+        title_sif = f'SIF Distribution (Missing: {sif_missing})'
+        axes[0].set_title(title_sif)
         axes[0].set_xticks(sif_unique)
         for cls, v in zip(sif_unique, sif_counts):
             axes[0].text(cls, v + 5, str(v), ha='center', fontweight='bold')
         axes[0].grid(True, alpha=0.3, axis='y')
 
-        # SGF 分布 - 使用 unique 获取实际存在的标签
-        sgf_unique, sgf_counts = np.unique(self.y_sgf.astype(int), return_counts=True)
+        # SGF 分布 - 过滤掉 -1，只计算有效标签
+        sgf_valid = self.y_sgf[self.y_sgf != -1]
+        sgf_unique, sgf_counts = np.unique(sgf_valid.astype(int), return_counts=True)
         axes[1].bar(sgf_unique, sgf_counts, color='coral',
                    edgecolor='black', alpha=0.7)
         axes[1].set_xlabel('SGF Stability Class')
         axes[1].set_ylabel('Count')
-        axes[1].set_title('SGF Distribution')
+        sgf_missing = np.sum(self.y_sgf == -1)
+        title_sgf = f'SGF Distribution (Missing: {sgf_missing})'
+        axes[1].set_title(title_sgf)
         axes[1].set_xticks(sgf_unique)
         for cls, v in zip(sgf_unique, sgf_counts):
             axes[1].text(cls, v + 5, str(v), ha='center', fontweight='bold')
@@ -235,11 +245,20 @@ class DataVisualizer:
         plt.close()
         output_paths.append(output_path1)
 
-        # 2. 联合分布热力图
+        # 2. 联合分布热力图 - 包含 -1 作为缺失类别
         fig, ax = plt.subplots(figsize=(8, 6))
 
-        # 创建交叉表
+        # 创建交叉表，包含所有值（包括 -1）
         joint_dist = pd.crosstab(self.y_sif, self.y_sgf)
+        
+        # 创建标签字典，将 -1 映射为 "Missing"
+        index_labels = [f"Missing" if x == -1 else str(int(x)) for x in joint_dist.index]
+        column_labels = [f"Missing" if x == -1 else str(int(x)) for x in joint_dist.columns]
+        
+        # 重新标记行和列
+        joint_dist.index = index_labels
+        joint_dist.columns = column_labels
+        
         sns.heatmap(joint_dist, annot=True, fmt='d', cmap='YlOrRd', ax=ax,
                    cbar_kws={'label': 'Count'})
         ax.set_xlabel('SGF Stability Class')
@@ -438,6 +457,8 @@ class DataVisualizer:
         """
         生成数据集的摘要统计信息。
 
+        包含缺失标签的统计信息（-1 值）。
+
         Returns:
             Dict[str, any]: 包含摘要统计信息的字典。
         """
@@ -445,16 +466,49 @@ class DataVisualizer:
             'PC_MolWt', 'PC_LogP', 'PC_HBA', 'PC_HBD'
         ]
 
+        # 计算缺失标签统计信息
+        sif_missing_mask = self.y_sif == -1
+        sgf_missing_mask = self.y_sgf == -1
+        sif_missing_count = np.sum(sif_missing_mask)
+        sgf_missing_count = np.sum(sgf_missing_mask)
+        
+        # 获取缺失标签的 ID
+        sif_missing_ids = self.ids[sif_missing_mask].tolist() if sif_missing_count > 0 else []
+        sgf_missing_ids = self.ids[sgf_missing_mask].tolist() if sgf_missing_count > 0 else []
+
+        # 生成标签分布（排除 -1）
+        sif_valid = self.y_sif[self.y_sif != -1]
+        sgf_valid = self.y_sgf[self.y_sgf != -1]
+        
+        # 转换为 Python int 以支持 JSON 序列化
+        if len(sif_valid) > 0:
+            sif_unique, sif_counts = np.unique(sif_valid, return_counts=True)
+            sif_dist_dict = {str(int(k)): int(v) for k, v in zip(sif_unique, sif_counts)}
+        else:
+            sif_dist_dict = {}
+        
+        if len(sgf_valid) > 0:
+            sgf_unique, sgf_counts = np.unique(sgf_valid, return_counts=True)
+            sgf_dist_dict = {str(int(k)): int(v) for k, v in zip(sgf_unique, sgf_counts)}
+        else:
+            sgf_dist_dict = {}
+
         summary = {
             'dataset_name': self.dataset_name,
             'n_samples': len(self.X),
             'n_features': len(self.feature_names),
-            'sif_label_distribution': dict(zip(*np.unique(
-                self.y_sif, return_counts=True
-            ))),
-            'sgf_label_distribution': dict(zip(*np.unique(
-                self.y_sgf, return_counts=True
-            ))),
+            'sif_label_distribution': sif_dist_dict,
+            'sgf_label_distribution': sgf_dist_dict,
+            'missing_values': {
+                'sif': {
+                    'count': int(sif_missing_count),
+                    'ids': sif_missing_ids
+                },
+                'sgf': {
+                    'count': int(sgf_missing_count),
+                    'ids': sgf_missing_ids
+                }
+            },
             'feature_statistics': {}
         }
 

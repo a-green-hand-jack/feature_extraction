@@ -86,25 +86,29 @@ def replace_dash_with_nan(value: Any) -> Any:
 
 def remove_empty_columns(df: pd.DataFrame) -> pd.DataFrame:
     """
-    删除所有空列。
+    保留所有列，包括完全为空的列。
     
-    删除其中所有值都是 NaN/空的列。
+    本函数保留数据框中的所有列，包括完全为空（所有值都是 NaN）的列。
+    这样可以确保即使某个标签列（如 SIF_class 或 SGF_class）完全为空，
+    后续的特征提取流程也能正确处理。
     
     Args:
         df (pd.DataFrame): 输入的 DataFrame。
     
     Returns:
-        pd.DataFrame: 删除空列后的 DataFrame。
+        pd.DataFrame: 保持不变的 DataFrame（保留所有列）。
     """
-    # 计算每列的非 NaN 值数量
+    # 计算每列的非 NaN 值数量（仅用于日志）
     non_null_counts = df.notna().sum()
+    empty_columns = non_null_counts[non_null_counts == 0].index.tolist()
     
-    # 找到所有非空列
-    non_empty_columns = non_null_counts[non_null_counts > 0].index.tolist()
+    if empty_columns:
+        logger.info(f"检测到 {len(empty_columns)} 个完全为空的列，但已保留：{', '.join(empty_columns)}")
+    else:
+        logger.info("未检测到完全为空的列")
     
-    logger.info(f"删除了 {len(df.columns) - len(non_empty_columns)} 个空列，保留了 {len(non_empty_columns)} 个非空列")
-    
-    return df[non_empty_columns]  # type: ignore[return-value]
+    # 保留所有列
+    return df
 
 
 def clean_us9624268(input_path: Path, output_path: Path) -> None:

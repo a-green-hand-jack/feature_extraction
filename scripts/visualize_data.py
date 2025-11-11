@@ -52,7 +52,7 @@ def load_npz_file(npz_path: Path) -> tuple:
         npz_path (Path): NPZ 文件路径。
 
     Returns:
-        tuple: (X, y_sif, y_sgf, feature_names) 元组。
+        tuple: (X, y_sif, y_sgf, feature_names, ids) 元组。
 
     Raises:
         FileNotFoundError: 文件不存在。
@@ -76,13 +76,16 @@ def load_npz_file(npz_path: Path) -> tuple:
         y_sif = npz['y_sif']
         y_sgf = npz['y_sgf']
         feature_names = npz['feature_names']
+        
+        # 加载 ids（如果存在）
+        ids = npz['ids'] if 'ids' in npz else np.arange(len(X), dtype=object)
 
         logger.info(
             f"成功加载 NPZ 文件: {npz_path.name} "
             f"({X.shape[0]} 个样本, {X.shape[1]} 个特征)"
         )
 
-        return X, y_sif, y_sgf, feature_names
+        return X, y_sif, y_sgf, feature_names, ids
 
     except Exception as e:
         logger.error(f"加载 NPZ 文件出错: {e}")
@@ -133,7 +136,7 @@ def generate_visualizations_for_file(
 
     try:
         # 加载 NPZ 文件
-        X, y_sif, y_sgf, feature_names = load_npz_file(npz_path)
+        X, y_sif, y_sgf, feature_names, ids = load_npz_file(npz_path)
 
         # 获取数据集名称（不含后缀）
         dataset_name = npz_path.stem
@@ -157,7 +160,8 @@ def generate_visualizations_for_file(
             y_sgf=y_sgf,
             feature_names=feature_names,
             dataset_name=dataset_name,
-            dpi=dpi
+            dpi=dpi,
+            ids=ids
         )
 
         # 生成所有图表
@@ -216,7 +220,8 @@ def generate_visualizations_for_file(
             'n_features': len(feature_names),
             'n_figures': len(generated_files),
             'figures': generated_files,
-            'summary': summary
+            'summary': summary,
+            'missing_values': summary.get('missing_values', {'sif': {'count': 0, 'ids': []}, 'sgf': {'count': 0, 'ids': []}})
         }
 
     except Exception as e:

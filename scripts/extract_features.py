@@ -105,35 +105,50 @@ def process_single_file(
         sif_class = row["SIF_class"]
         sgf_class = row["SGF_class"]
         
-        # 检查标签是否为空（NaN）或为特殊字符串
-        if pd.isna(sif_class) or pd.isna(sgf_class):
+        # 检查两个标签是否都缺失 - 只有都缺失才跳过
+        sif_is_na = bool(pd.isna(sif_class))
+        sgf_is_na = bool(pd.isna(sgf_class))
+        
+        if sif_is_na and sgf_is_na:
             logger.debug(
-                f"行 {idx}: 缺失标签 (SIF: {sif_class}, SGF: {sgf_class})，跳过"
+                f"行 {idx}: 两个标签都缺失，跳过"
             )
             mask_valid.append(False)
             continue
         
-        # 处理特殊字符串（如 '----'）
-        sif_str = str(sif_class).strip()
-        sgf_str = str(sgf_class).strip()
+        # 处理 SIF_class - 如果缺失则用 -1 表示
+        sif_int = -1
+        if not sif_is_na:
+            sif_str = str(sif_class).strip()
+            
+            if sif_str == '' or sif_str == '----':
+                logger.debug(f"行 {idx}: SIF_class 为空字符串，标记为 -1")
+                sif_int = -1
+            else:
+                try:
+                    sif_int = int(float(sif_str))
+                except (ValueError, OverflowError):
+                    logger.debug(
+                        f"行 {idx}: 无法将 SIF_class 转换为整数 (值: {sif_str})，标记为 -1"
+                    )
+                    sif_int = -1
         
-        if sif_str == '' or sif_str == '----' or sgf_str == '' or sgf_str == '----':
-            logger.debug(
-                f"行 {idx}: 无效的标签字符串 (SIF: {sif_str}, SGF: {sgf_str})，跳过"
-            )
-            mask_valid.append(False)
-            continue
-        
-        # 尝试转换为整数（先转浮点再转整数以支持 1.0 这样的值）
-        try:
-            sif_int = int(float(sif_str))
-            sgf_int = int(float(sgf_str))
-        except (ValueError, OverflowError):
-            logger.debug(
-                f"行 {idx}: 无法将标签转换为整数 (SIF: {sif_str}, SGF: {sgf_str})，跳过"
-            )
-            mask_valid.append(False)
-            continue
+        # 处理 SGF_class - 如果缺失则用 -1 表示
+        sgf_int = -1
+        if not sgf_is_na:
+            sgf_str = str(sgf_class).strip()
+            
+            if sgf_str == '' or sgf_str == '----':
+                logger.debug(f"行 {idx}: SGF_class 为空字符串，标记为 -1")
+                sgf_int = -1
+            else:
+                try:
+                    sgf_int = int(float(sgf_str))
+                except (ValueError, OverflowError):
+                    logger.debug(
+                        f"行 {idx}: 无法将 SGF_class 转换为整数 (值: {sgf_str})，标记为 -1"
+                    )
+                    sgf_int = -1
         
         # 提取特征
         features, success = featurizer.featurize(smiles)
@@ -153,6 +168,14 @@ def process_single_file(
         error_msg = f"文件 {csv_path.name} 中没有有效样本"
         logger.error(error_msg)
         return False, {"error": error_msg}
+    
+    # 统计缺失标签信息
+    sif_missing_count = sum(1 for label in y_sif if label == -1)
+    sgf_missing_count = sum(1 for label in y_sgf if label == -1)
+    
+    # 获取缺失标签的样本 ID
+    sif_missing_ids = [ids[i] for i, label in enumerate(y_sif) if label == -1]
+    sgf_missing_ids = [ids[i] for i, label in enumerate(y_sgf) if label == -1]
     
     # 转换为 NumPy 数组
     X = np.asarray(X, dtype=np.float32)
@@ -193,13 +216,21 @@ def process_single_file(
         "valid_rows": len(X),
         "invalid_rows": len(df) - len(X),
         "output_path": output_path,
+        "missing_labels": {
+            "sif_missing_count": sif_missing_count,
+            "sgf_missing_count": sgf_missing_count,
+            "sif_missing_ids": sif_missing_ids,
+            "sgf_missing_ids": sgf_missing_ids,
+        }
     }
     
     logger.info(f"文件处理完成: {csv_path.name}")
     logger.info(
         f"  - 总行数: {stats['total_rows']}, "
         f"有效行: {stats['valid_rows']}, "
-        f"无效行: {stats['invalid_rows']}"
+        f"无效行: {stats['invalid_rows']}, "
+        f"SIF缺失: {sif_missing_count}, "
+        f"SGF缺失: {sgf_missing_count}"
     )
     
     return True, stats
