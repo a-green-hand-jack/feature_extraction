@@ -8,3 +8,11 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Log files
+*.log
+visualization.log
+feature_extraction.log
+
+# Generated outputs (optional - uncomment if you don't want to commit outputs)
+# outputs/

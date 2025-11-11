@@ -1,0 +1,21 @@
+[
+  {
+    "dataset": "US9624268_cleaned",
+    "success": true,
+    "n_samples": 90,
+    "n_features": 1560,
+    "n_figures": 6,
+    "figures": [
+      "outputs/figures/US9624268_cleaned_feature_distributions.png",
+      "outputs/figures/US9624268_cleaned_label_distribution.png",
+      "outputs/figures/US9624268_cleaned_label_joint_distribution.png",
+      "outputs/figures/US9624268_cleaned_grouped_boxplots.png",
+      "outputs/figures/US9624268_cleaned_correlation_heatmap.png",
+      "outputs/figures/US9624268_cleaned_scatter_matrix.png"
+    ],
+    "summary": {
+      "dataset_name": "US9624268_cleaned",
+      "n_samples": 90,
+      "n_features": 1560,
+      "sif_label_distribution": {
+        
