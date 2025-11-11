@@ -1820,3 +1820,36 @@
 ============================================================
 
 2025-11-11 16:25:49,141 - __main__ - INFO - 特征提取完成！
+2025-11-11 16:57:41,903 - __main__ - INFO - ============================================================
+2025-11-11 16:57:41,903 - __main__ - INFO - 开始 SIF/SGF 特征提取
+2025-11-11 16:57:41,903 - __main__ - INFO - ============================================================
+2025-11-11 16:57:41,903 - __main__ - INFO - 输入目录: /home/wuj0c/Projects/SIF_SGF/feature_extraction/data/cleaned
+2025-11-11 16:57:41,903 - __main__ - INFO - 输出目录: /home/wuj0c/Projects/SIF_SGF/feature_extraction/outputs/features
+2025-11-11 16:57:41,903 - __main__ - INFO - Morgan 位数: 1024
+2025-11-11 16:57:41,903 - __main__ - INFO - Avalon 位数: 512
+2025-11-11 16:57:41,903 - __main__ - INFO - 启用 Avalon: True
+2025-11-11 16:57:41,903 - __main__ - INFO - 输出目录已创建: /home/wuj0c/Projects/SIF_SGF/feature_extraction/outputs/features
+2025-11-11 16:57:41,903 - __main__ - INFO - 特征维度: 1560
+2025-11-11 16:57:41,904 - feature_extraction.utils - INFO - 在 data/cleaned 中找到 2 个 CSV 文件
+2025-11-11 16:57:41,904 - __main__ - INFO - 找到 2 个 CSV 文件待处理
+2025-11-11 16:57:41,911 - feature_extraction.utils - INFO - 成功加载 CSV 文件: data/cleaned/US9624268_cleaned.csv (775 行)
+2025-11-11 16:57:41,911 - __main__ - INFO - 开始处理文件: US9624268_cleaned.csv
+2025-11-11 16:57:44,898 - feature_extraction.utils - INFO - 成功保存特征文件: outputs/features/US9624268_cleaned.npz (130 个有效样本, 1560 个特征)
+2025-11-11 16:57:44,899 - __main__ - INFO - 文件处理完成: US9624268_cleaned.csv
+2025-11-11 16:57:44,899 - __main__ - INFO -   - 总行数: 775, 有效行: 130, 无效行: 645, SIF缺失: 0, SGF缺失: 40
+2025-11-11 16:57:44,907 - feature_extraction.utils - INFO - 成功加载 CSV 文件: data/cleaned/sif_sgf_second_cleaned.csv (897 行)
+2025-11-11 16:57:44,908 - __main__ - INFO - 开始处理文件: sif_sgf_second_cleaned.csv
+2025-11-11 17:00:40,547 - feature_extraction.utils - INFO - 成功保存特征文件: outputs/features/sif_sgf_second_cleaned.npz (558 个有效样本, 1560 个特征)
+2025-11-11 17:00:40,547 - __main__ - INFO - 文件处理完成: sif_sgf_second_cleaned.csv
+2025-11-11 17:00:40,547 - __main__ - INFO -   - 总行数: 897, 有效行: 558, 无效行: 339, SIF缺失: 0, SGF缺失: 0
+2025-11-11 17:00:40,548 - __main__ - INFO - 
+============================================================
+批量特征提取摘要
+============================================================
+处理文件数: 2/2
+总样本数: 1672
+  - 有效样本: 688
+  - 无效样本: 984
+============================================================
+
+2025-11-11 17:00:40,548 - __main__ - INFO - 特征提取完成！

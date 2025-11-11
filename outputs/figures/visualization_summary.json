@@ -2,7 +2,7 @@
   {
     "dataset": "US9624268_cleaned",
     "success": true,
-    "n_samples": 90,
+    "n_samples": 130,
     "n_features": 1560,
     "n_figures": 6,
     "figures": [
@@ -15,7 +15,236 @@
     ],
     "summary": {
       "dataset_name": "US9624268_cleaned",
-      "n_samples": 90,
+      "n_samples": 130,
       "n_features": 1560,
       "sif_label_distribution": {
-        
+        "1": 49,
+        "2": 27,
+        "3": 16,
+        "4": 10,
+        "5": 28
+      },
+      "sgf_label_distribution": {
+        "1": 37,
+        "2": 15,
+        "3": 12,
+        "4": 4,
+        "5": 22
+      },
+      "missing_values": {
+        "sif": {
+          "count": 0,
+          "ids": []
+        },
+        "sgf": {
+          "count": 40,
+          "ids": [
+            "1024",
+            "1023",
+            "924",
+            "892",
+            "891",
+            "890",
+            "889",
+            "888",
+            "887",
+            "817",
+            "816",
+            "809",
+            "804",
+            "792",
+            "788",
+            "785",
+            "713",
+            "711",
+            "710",
+            "709",
+            "708",
+            "707",
+            "698",
+            "697",
+            "695",
+            "694",
+            "693",
+            "673",
+            "671",
+            "560",
+            "555",
+            "554",
+            "553",
+            "552",
+            "550",
+            "549",
+            "548",
+            "521",
+            "520",
+            "516"
+          ]
+        }
+      },
+      "feature_statistics": {
+        "PC_MolWt": {
+          "mean": 1697.5924072265625,
+          "std": 101.7633285522461,
+          "min": 1478.699951171875,
+          "max": 1930.300048828125,
+          "median": 1677.9415283203125
+        },
+        "PC_LogP": {
+          "mean": -4.250922679901123,
+          "std": 1.5872727632522583,
+          "min": -9.780200004577637,
+          "max": -0.816100001335144,
+          "median": -4.193920135498047
+        },
+        "PC_HBA": {
+          "mean": 22.269229888916016,
+          "std": 1.4076083898544312,
+          "min": 19.0,
+          "max": 26.0,
+          "median": 22.0
+        },
+        "PC_HBD": {
+          "mean": 21.492307662963867,
+          "std": 1.9104816913604736,
+          "min": 19.0,
+          "max": 28.0,
+          "median": 21.0
+        }
+      }
+    },
+    "missing_values": {
+      "sif": {
+        "count": 0,
+        "ids": []
+      },
+      "sgf": {
+        "count": 40,
+        "ids": [
+          "1024",
+          "1023",
+          "924",
+          "892",
+          "891",
+          "890",
+          "889",
+          "888",
+          "887",
+          "817",
+          "816",
+          "809",
+          "804",
+          "792",
+          "788",
+          "785",
+          "713",
+          "711",
+          "710",
+          "709",
+          "708",
+          "707",
+          "698",
+          "697",
+          "695",
+          "694",
+          "693",
+          "673",
+          "671",
+          "560",
+          "555",
+          "554",
+          "553",
+          "552",
+          "550",
+          "549",
+          "548",
+          "521",
+          "520",
+          "516"
+        ]
+      }
+    }
+  },
+  {
+    "dataset": "sif_sgf_second_cleaned",
+    "success": true,
+    "n_samples": 558,
+    "n_features": 1560,
+    "n_figures": 6,
+    "figures": [
+      "outputs/figures/sif_sgf_second_cleaned_feature_distributions.png",
+      "outputs/figures/sif_sgf_second_cleaned_label_distribution.png",
+      "outputs/figures/sif_sgf_second_cleaned_label_joint_distribution.png",
+      "outputs/figures/sif_sgf_second_cleaned_grouped_boxplots.png",
+      "outputs/figures/sif_sgf_second_cleaned_correlation_heatmap.png",
+      "outputs/figures/sif_sgf_second_cleaned_scatter_matrix.png"
+    ],
+    "summary": {
+      "dataset_name": "sif_sgf_second_cleaned",
+      "n_samples": 558,
+      "n_features": 1560,
+      "sif_label_distribution": {
+        "1": 150,
+        "2": 16,
+        "3": 31,
+        "4": 361
+      },
+      "sgf_label_distribution": {
+        "1": 244,
+        "2": 25,
+        "3": 20,
+        "4": 269
+      },
+      "missing_values": {
+        "sif": {
+          "count": 0,
+          "ids": []
+        },
+        "sgf": {
+          "count": 0,
+          "ids": []
+        }
+      },
+      "feature_statistics": {
+        "PC_MolWt": {
+          "mean": 4120.82958984375,
+          "std": 1526.080078125,
+          "min": 1733.991943359375,
+          "max": 11165.85546875,
+          "median": 5113.1630859375
+        },
+        "PC_LogP": {
+          "mean": 1.7952344417572021,
+          "std": 2.556668996810913,
+          "min": -4.482999801635742,
+          "max": 9.26613998413086,
+          "median": 1.380270004272461
+        },
+        "PC_HBA": {
+          "mean": 52.68817138671875,
+          "std": 21.777538299560547,
+          "min": 20.0,
+          "max": 152.0,
+          "median": 67.0
+        },
+        "PC_HBD": {
+          "mean": 41.20429992675781,
+          "std": 12.186182975769043,
+          "min": 19.0,
+          "max": 100.0,
+          "median": 48.0
+        }
+      }
+    },
+    "missing_values": {
+      "sif": {
+        "count": 0,
+        "ids": []
+      },
+      "sgf": {
+        "count": 0,
+        "ids": []
+      }
+    }
+  }
+]
