@@ -1,0 +1,197 @@
+[
+  {
+    "model": "LogisticRegression",
+    "accuracy": 0.24444444444444444,
+    "precision": 0.08148148148148147,
+    "recall": 0.3333333333333333,
+    "f1": 0.13095238095238096,
+    "auc": NaN,
+    "confusion_matrix": [
+      [
+        22,
+        0,
+        0
+      ],
+      [
+        4,
+        0,
+        0
+      ],
+      [
+        64,
+        0,
+        0
+      ]
+    ],
+    "classification_report": {
+      "0": {
+        "precision": 0.24444444444444444,
+        "recall": 1.0,
+        "f1-score": 0.39285714285714285,
+        "support": 22.0
+      },
+      "1": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 4.0
+      },
+      "2": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 64.0
+      },
+      "accuracy": 0.24444444444444444,
+      "macro avg": {
+        "precision": 0.08148148148148147,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.13095238095238096,
+        "support": 90.0
+      },
+      "weighted avg": {
+        "precision": 0.05975308641975308,
+        "recall": 0.24444444444444444,
+        "f1-score": 0.09603174603174602,
+        "support": 90.0
+      }
+    },
+    "n_train_samples": 558,
+    "n_test_samples": 90,
+    "n_classes": 3,
+    "train_dataset": "sif_sgf_second_cleaned",
+    "test_dataset": "US9624268_cleaned",
+    "target": "SGF",
+    "direction": "sif_sgf_second_cleaned → US9624268_cleaned"
+  },
+  {
+    "model": "RandomForest",
+    "accuracy": 0.24444444444444444,
+    "precision": 0.08148148148148147,
+    "recall": 0.3333333333333333,
+    "f1": 0.13095238095238096,
+    "auc": NaN,
+    "confusion_matrix": [
+      [
+        22,
+        0,
+        0
+      ],
+      [
+        4,
+        0,
+        0
+      ],
+      [
+        64,
+        0,
+        0
+      ]
+    ],
+    "classification_report": {
+      "0": {
+        "precision": 0.24444444444444444,
+        "recall": 1.0,
+        "f1-score": 0.39285714285714285,
+        "support": 22.0
+      },
+      "1": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 4.0
+      },
+      "2": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 64.0
+      },
+      "accuracy": 0.24444444444444444,
+      "macro avg": {
+        "precision": 0.08148148148148147,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.13095238095238096,
+        "support": 90.0
+      },
+      "weighted avg": {
+        "precision": 0.05975308641975308,
+        "recall": 0.24444444444444444,
+        "f1-score": 0.09603174603174602,
+        "support": 90.0
+      }
+    },
+    "n_train_samples": 558,
+    "n_test_samples": 90,
+    "n_classes": 3,
+    "train_dataset": "sif_sgf_second_cleaned",
+    "test_dataset": "US9624268_cleaned",
+    "target": "SGF",
+    "direction": "sif_sgf_second_cleaned → US9624268_cleaned"
+  },
+  {
+    "model": "XGBoost",
+    "accuracy": 0.24444444444444444,
+    "precision": 0.08148148148148147,
+    "recall": 0.3333333333333333,
+    "f1": 0.13095238095238096,
+    "auc": NaN,
+    "confusion_matrix": [
+      [
+        22,
+        0,
+        0
+      ],
+      [
+        4,
+        0,
+        0
+      ],
+      [
+        64,
+        0,
+        0
+      ]
+    ],
+    "classification_report": {
+      "0": {
+        "precision": 0.24444444444444444,
+        "recall": 1.0,
+        "f1-score": 0.39285714285714285,
+        "support": 22.0
+      },
+      "1": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 4.0
+      },
+      "2": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 64.0
+      },
+      "accuracy": 0.24444444444444444,
+      "macro avg": {
+        "precision": 0.08148148148148147,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.13095238095238096,
+        "support": 90.0
+      },
+      "weighted avg": {
+        "precision": 0.05975308641975308,
+        "recall": 0.24444444444444444,
+        "f1-score": 0.09603174603174602,
+        "support": 90.0
+      }
+    },
+    "n_train_samples": 558,
+    "n_test_samples": 90,
+    "n_classes": 3,
+    "train_dataset": "sif_sgf_second_cleaned",
+    "test_dataset": "US9624268_cleaned",
+    "target": "SGF",
+    "direction": "sif_sgf_second_cleaned → US9624268_cleaned"
+  }
+]

@@ -1,0 +1,4 @@
+train_dataset,test_dataset,target,direction,model,n_train_samples,n_test_samples,n_classes,accuracy,precision,recall,f1,auc
+US9624268_cleaned,sif_sgf_second_cleaned,SGF,US9624268_cleaned → sif_sgf_second_cleaned,LogisticRegression,90,558,4,0.13440860215053763,0.19024227584010192,0.3502049180327869,0.13320186358773356,
+US9624268_cleaned,sif_sgf_second_cleaned,SGF,US9624268_cleaned → sif_sgf_second_cleaned,RandomForest,90,558,4,0.035842293906810034,0.008960573476702509,0.25,0.01730103806228374,
+US9624268_cleaned,sif_sgf_second_cleaned,SGF,US9624268_cleaned → sif_sgf_second_cleaned,XGBoost,90,558,4,0.07526881720430108,0.10193938657020397,0.23811475409836064,0.0568269769256423,
