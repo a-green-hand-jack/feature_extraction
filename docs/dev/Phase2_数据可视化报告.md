@@ -43,9 +43,9 @@
 - 单体均值: 236.6 ± 169.7 分钟
 
 **可视化图表**:
-- [单体 vs 二聚体 SIF 分布](outputs/figures/phase2/within_patent/US20140294902A1/US20140294902A1_monomer_dimer_sif_distribution.png)
-- [单体 vs 二聚体 SGF 分布](outputs/figures/phase2/within_patent/US20140294902A1/US20140294902A1_monomer_dimer_sgf_distribution.png)
-- [结构特征对比](outputs/figures/phase2/within_patent/US20140294902A1/US20140294902A1_structural_features_comparison.png)
+- ![单体 vs 二聚体 SIF 分布](../../outputs/figures/phase2/within_patent/US20140294902A1/US20140294902A1_monomer_dimer_sif_distribution.png)
+- ![单体 vs 二聚体 SGF 分布](../../outputs/figures/phase2/within_patent/US20140294902A1/US20140294902A1_monomer_dimer_sgf_distribution.png)
+- ![结构特征对比](../../outputs/figures/phase2/within_patent/US20140294902A1/US20140294902A1_structural_features_comparison.png)
 
 #### US9624268
 
@@ -56,9 +56,9 @@
 - 单体均值: 249.0 ± 162.9 分钟
 
 **可视化图表**:
-- [单体 vs 二聚体 SIF 分布](outputs/figures/phase2/within_patent/US9624268/US9624268_monomer_dimer_sif_distribution.png)
-- [单体 vs 二聚体 SGF 分布](outputs/figures/phase2/within_patent/US9624268/US9624268_monomer_dimer_sgf_distribution.png)
-- [结构特征对比](outputs/figures/phase2/within_patent/US9624268/US9624268_structural_features_comparison.png)
+- ![单体 vs 二聚体 SIF 分布](../../outputs/figures/phase2/within_patent/US9624268/US9624268_monomer_dimer_sif_distribution.png)
+- ![单体 vs 二聚体 SGF 分布](../../outputs/figures/phase2/within_patent/US9624268/US9624268_monomer_dimer_sgf_distribution.png)
+- ![结构特征对比](../../outputs/figures/phase2/within_patent/US9624268/US9624268_structural_features_comparison.png)
 
 #### US9809623B2
 
@@ -73,9 +73,9 @@
 - Mann-Whitney U 检验: p = 0.0045 (**显著差异**)
 
 **可视化图表**:
-- [单体 vs 二聚体 SIF 分布](outputs/figures/phase2/within_patent/US9809623B2/US9809623B2_monomer_dimer_sif_distribution.png)
-- [单体 vs 二聚体 SGF 分布](outputs/figures/phase2/within_patent/US9809623B2/US9809623B2_monomer_dimer_sgf_distribution.png)
-- [结构特征对比](outputs/figures/phase2/within_patent/US9809623B2/US9809623B2_structural_features_comparison.png)
+- ![单体 vs 二聚体 SIF 分布](../../outputs/figures/phase2/within_patent/US9809623B2/US9809623B2_monomer_dimer_sif_distribution.png)
+- ![单体 vs 二聚体 SGF 分布](../../outputs/figures/phase2/within_patent/US9809623B2/US9809623B2_monomer_dimer_sgf_distribution.png)
+- ![结构特征对比](../../outputs/figures/phase2/within_patent/US9809623B2/US9809623B2_structural_features_comparison.png)
 
 #### WO2017011820A2
 
@@ -90,9 +90,9 @@
 - Mann-Whitney U 检验: p = 0.2817 (无显著差异)
 
 **可视化图表**:
-- [单体 vs 二聚体 SIF 分布](outputs/figures/phase2/within_patent/WO2017011820A2/WO2017011820A2_monomer_dimer_sif_distribution.png)
-- [单体 vs 二聚体 SGF 分布](outputs/figures/phase2/within_patent/WO2017011820A2/WO2017011820A2_monomer_dimer_sgf_distribution.png)
-- [结构特征对比](outputs/figures/phase2/within_patent/WO2017011820A2/WO2017011820A2_structural_features_comparison.png)
+- ![单体 vs 二聚体 SIF 分布](../../outputs/figures/phase2/within_patent/WO2017011820A2/WO2017011820A2_monomer_dimer_sif_distribution.png)
+- ![单体 vs 二聚体 SGF 分布](../../outputs/figures/phase2/within_patent/WO2017011820A2/WO2017011820A2_monomer_dimer_sgf_distribution.png)
+- ![结构特征对比](../../outputs/figures/phase2/within_patent/WO2017011820A2/WO2017011820A2_structural_features_comparison.png)
 
 #### sif_sgf_second
 
@@ -107,9 +107,9 @@
 - Mann-Whitney U 检验: p = 0.9303 (无显著差异)
 
 **可视化图表**:
-- [单体 vs 二聚体 SIF 分布](outputs/figures/phase2/within_patent/sif_sgf_second/sif_sgf_second_monomer_dimer_sif_distribution.png)
-- [单体 vs 二聚体 SGF 分布](outputs/figures/phase2/within_patent/sif_sgf_second/sif_sgf_second_monomer_dimer_sgf_distribution.png)
-- [结构特征对比](outputs/figures/phase2/within_patent/sif_sgf_second/sif_sgf_second_structural_features_comparison.png)
+- ![单体 vs 二聚体 SIF 分布](../../outputs/figures/phase2/within_patent/sif_sgf_second/sif_sgf_second_monomer_dimer_sif_distribution.png)
+- ![单体 vs 二聚体 SGF 分布](../../outputs/figures/phase2/within_patent/sif_sgf_second/sif_sgf_second_monomer_dimer_sgf_distribution.png)
+- ![结构特征对比](../../outputs/figures/phase2/within_patent/sif_sgf_second/sif_sgf_second_structural_features_comparison.png)
 
 ### 3.2 关键发现（专利内）
 
@@ -132,8 +132,8 @@
 **方法**: PCA 和 t-SNE 降维到 2D 空间
 
 **可视化图表**:
-- [PCA 2D 投影](outputs/figures/phase2/between_patents/pca_2d_by_patent.png)
-- [t-SNE 2D 投影](outputs/figures/phase2/between_patents/tsne_2d_by_patent.png)
+- ![PCA 2D 投影](../../outputs/figures/phase2/between_patents/pca_2d_by_patent.png)
+- ![t-SNE 2D 投影](../../outputs/figures/phase2/between_patents/tsne_2d_by_patent.png)
 
 **解读**:
 - 不同专利数据集在特征空间中有明显的聚类分离
@@ -143,9 +143,9 @@
 ### 4.2 标签分布对比
 
 **可视化图表**:
-- [SIF 稳定性小提琴图](outputs/figures/phase2/between_patents/violin_plot_sif.png)
-- [SGF 稳定性小提琴图](outputs/figures/phase2/between_patents/violin_plot_sgf.png)
-- [箱线图对比](outputs/figures/phase2/between_patents/boxplot_comparison.png)
+- ![SIF 稳定性小提琴图](../../outputs/figures/phase2/between_patents/violin_plot_sif.png)
+- ![SGF 稳定性小提琴图](../../outputs/figures/phase2/between_patents/violin_plot_sgf.png)
+- ![箱线图对比](../../outputs/figures/phase2/between_patents/boxplot_comparison.png)
 
 **统计检验**: Kruskal-Wallis 检验显示不同专利数据集的标签分布存在显著差异（p < 0.001）
 
@@ -160,8 +160,8 @@
 | sif_sgf_second | 558 | 36.2 | 100.0 | 21.7 | 111.8±53.7 | 92.6±57.7 |
 
 **可视化图表**:
-- [数据集统计对比](outputs/figures/phase2/between_patents/dataset_statistics_comparison.png)
-- [统计检验结果表](outputs/figures/phase2/between_patents/statistical_tests_results.csv)
+- ![数据集统计对比](../../outputs/figures/phase2/between_patents/dataset_statistics_comparison.png)
+- [统计检验结果表](../../outputs/figures/phase2/between_patents/statistical_tests_results.csv)
 
 ### 4.4 关键发现（专利间）
 
@@ -197,7 +197,7 @@
 ```bash
 uv run python scripts/visualize_within_patent.py \
     --input_dir data/processed/ \
-    --output_dir outputs/figures/phase2/within_patent/ \
+    --output_dir ../../outputs/figures/phase2/within_patent/ \
     --dpi 300
 ```
 
@@ -216,7 +216,7 @@ uv run python scripts/visualize_within_patent.py \
 uv run python scripts/visualize_between_patents.py \
     --features_dir outputs/features/ \
     --processed_dir data/processed/ \
-    --output_dir outputs/figures/phase2/between_patents/ \
+    --output_dir ../../outputs/figures/phase2/between_patents/ \
     --dpi 300
 ```
 
@@ -232,7 +232,7 @@ uv run python scripts/visualize_between_patents.py \
 ### 5.2 输出文件结构
 
 ```
-outputs/figures/phase2/
+../../outputs/figures/phase2/
 ├── within_patent/              # 专利内可视化
 │   ├── sif_sgf_second/
 │   │   ├── *_monomer_dimer_sif_distribution.png
