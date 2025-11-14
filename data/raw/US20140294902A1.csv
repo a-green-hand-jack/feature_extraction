@@ -1,0 +1,6 @@
+﻿id,SMILES,SIF_class,SGF_class,,,,,,,,,,,,,,,,
+39,CC(=O)N[C@H]1CSSC[C@@H](C(N)=O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H]([C@@H](C)O)NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CO)NC(=O)[C@H](CCCNC(=N)N)NC1=O,1,,,,,,,,,,,,,,,,,
+46,CC(=O)N[C@H]1CSSC[C@@H](C(N)=O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H]([C@@H](C)O)NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CO)NC(=O)[C@H](CCCNC(=N)N)N(C)C1=O,73,,,,,,,,,,,,,,,,,
+55,CC(=O)N[C@H]1CSSC(C)(C)[C@@H](C(=O)N[C@H](CCCCN)C(N)=O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H]([C@@H](C)O)NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CO)NC(=O)[C@H](CCCNC(=N)N)N(C)C1=O,360,,,,,,,,,,,,,,,,,
+74,CC(=O)N[C@H]1CSSC(C)(C)[C@@H](C(=O)N[C@@H](CCC(=O)O)C(=O)N[C@H](CCCCN)C(N)=O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H]([C@@H](C)O)NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CO)NC(=O)[C@H](CCCNC(=N)N)N(C)C1=O,360,,,,,,,,,,,,,,,,,
+93,CC(=O)N[C@@H]1C(=O)N(C)[C@@H](CCCNC(=N)N)C(=O)N[C@@H](CO)C(=O)N[C@@H](CC(=O)O)C(=O)N[C@@H]([C@@H](C)O)C(=O)N[C@@H](CC(C)C)C(=O)N[C@H](C(=O)N[C@H](CCCCN)C(N)=O)C(C)(C)SSC1(C)C,360,,,,,,,,,,,,,,,,,

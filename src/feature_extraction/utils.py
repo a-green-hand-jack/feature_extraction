@@ -5,11 +5,14 @@
 """
 
 import logging
+import re
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Union
 
 import pandas as pd
 import numpy as np
+from rdkit import Chem
+from rdkit.Chem import Descriptors
 
 logger = logging.getLogger(__name__)
 
@@ -205,4 +208,232 @@ def format_batch_summary(
         f"{'='*60}\n"
     )
     return summary
+
+
+# ============================================================================
+# 分子特征检测函数
+# ============================================================================
+
+def detect_dimer(smiles: str) -> bool:
+    """
+    检测肽链是否为二聚体。
+
+    检测策略：
+    1. 分子量：二聚体通常 > 2000 Da
+    2. SMILES 长度：二聚体通常很长 (> 400 字符)
+    3. 连接基团：检测 PEG 连接子 (CCOCCOCC) 或特定连接模式
+
+    Args:
+        smiles (str): SMILES 字符串
+
+    Returns:
+        bool: True 表示二聚体，False 表示单体
+    """
+    try:
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            logger.debug(f"无法解析 SMILES (dimer detection): {smiles[:50]}...")
+            return False
+
+        # 策略 1: 分子量判断
+        mw = Descriptors.MolWt(mol)
+        if mw > 2500:  # 二聚体通常 > 2500 Da
+            return True
+
+        # 策略 2: SMILES 长度判断（辅助）
+        if len(smiles) > 500:  # 长 SMILES 通常是二聚体或 PEG 化合物
+            # 进一步检查 PEG 连接子
+            if "CCOCCOCC" in smiles or "CCOCCOCCOC" in smiles:
+                return True
+
+        # 策略 3: 检测多个肽链特征（保守判断）
+        # 计算肽键数量 (C(=O)N 模式)
+        peptide_bonds = len(re.findall(r'C\(=O\)N', smiles))
+        if peptide_bonds > 20 and mw > 2000:  # 大量肽键 + 高分子量
+            return True
+
+        return False
+
+    except Exception as e:
+        logger.debug(f"检测二聚体时出错: {e}")
+        return False
+
+
+def detect_cyclic(smiles: str) -> bool:
+    """
+    检测肽链是否含有环状结构。
+
+    检测策略：
+    1. RDKit 环计数
+    2. SMILES 中的环闭合标记（数字对）
+
+    Args:
+        smiles (str): SMILES 字符串
+
+    Returns:
+        bool: True 表示含环，False 表示无环
+    """
+    try:
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            logger.debug(f"无法解析 SMILES (cyclic detection): {smiles[:50]}...")
+            return False
+
+        # 策略 1: RDKit 环计数
+        num_rings = Descriptors.RingCount(mol)
+        if num_rings > 0:
+            return True
+
+        # 策略 2: SMILES 环闭合标记检测（备用）
+        # 环闭合用数字表示，如 C1CCCCC1 表示环己烷
+        ring_closures = re.findall(r'\d+', smiles)
+        if len(ring_closures) >= 2:  # 至少一对环闭合标记
+            return True
+
+        return False
+
+    except Exception as e:
+        logger.debug(f"检测环状结构时出错: {e}")
+        return False
+
+
+def detect_disulfide(smiles: str) -> bool:
+    """
+    检测肽链是否含有二硫键。
+
+    检测策略：
+    1. SMILES 中查找 "SS" 模式
+    2. 使用 RDKit 子结构匹配
+
+    Args:
+        smiles (str): SMILES 字符串
+
+    Returns:
+        bool: True 表示含二硫键，False 表示无二硫键
+    """
+    try:
+        # 策略 1: 简单模式匹配
+        if "SS" in smiles:
+            return True
+
+        # 策略 2: RDKit 子结构匹配（更准确）
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            logger.debug(f"无法解析 SMILES (disulfide detection): {smiles[:50]}...")
+            return False
+
+        # 二硫键 SMARTS 模式: [S]-[S]
+        disulfide_pattern = Chem.MolFromSmarts("[S][S]")
+        if disulfide_pattern is not None:
+            if mol.HasSubstructMatch(disulfide_pattern):
+                return True
+
+        return False
+
+    except Exception as e:
+        logger.debug(f"检测二硫键时出错: {e}")
+        return False
+
+
+# ============================================================================
+# 标签转换函数
+# ============================================================================
+
+def convert_label_to_minutes(label: Union[str, int, float]) -> int:
+    """
+    将各种标签编码统一转换为分钟（使用区间中点值）。
+
+    转换规则：
+    1. 星号系统 (*****～*):
+       - ***** (< 60 min) → 30
+       - **** (60-120 min) → 90
+       - *** (120-180 min) → 150
+       - ** (180-360 min) → 270
+       - * (> 360 min) → 420
+
+    2. 数字分类 (1-4):
+       - 1 (< 1 hour / < 60 min) → 30
+       - 2 (1-1.5 hours / 60-90 min) → 75
+       - 3 (1.5-2 hours / 90-120 min) → 105
+       - 4 (> 2 hours / > 120 min) → 150
+
+    3. 直接分钟值: 保持不变
+
+    4. 缺失值 (空值、"---"、NaN): → -1
+
+    Args:
+        label: 原始标签值（可以是字符串、整数或浮点数）
+
+    Returns:
+        int: 转换后的分钟值，缺失值返回 -1
+    """
+    # 处理缺失值
+    if pd.isna(label) or label == "" or label == "---" or label is None:
+        return -1
+
+    # 转换为字符串处理
+    label_str = str(label).strip()
+
+    # 空字符串
+    if not label_str:
+        return -1
+
+    # 处理星号系统（去掉可能的 "S" 后缀）
+    label_clean = label_str.rstrip("S").strip()
+
+    if label_clean == "*****":
+        return 30
+    elif label_clean == "****":
+        return 90
+    elif label_clean == "***":
+        return 150
+    elif label_clean == "**":
+        return 270
+    elif label_clean == "*":
+        return 420
+
+    # 处理数字分类 (1-4)
+    try:
+        num_val = int(float(label_clean))
+        if num_val == 1:
+            return 30
+        elif num_val == 2:
+            return 75
+        elif num_val == 3:
+            return 105
+        elif num_val == 4:
+            return 150
+        # 如果是其他整数，尝试作为直接分钟值
+        elif num_val >= 0:
+            return num_val
+        else:
+            return -1
+    except ValueError:
+        # 无法转换为数字，标记为缺失
+        logger.debug(f"无法转换标签为分钟值: '{label}'")
+        return -1
+
+
+def extract_molecular_features(smiles: str) -> dict:
+    """
+    提取单个 SMILES 的分子特征。
+
+    Args:
+        smiles (str): SMILES 字符串
+
+    Returns:
+        dict: 包含以下键的字典：
+            - is_monomer (bool): 是否为单体
+            - is_dimer (bool): 是否为二聚体
+            - is_cyclic (bool): 是否含环
+            - has_disulfide_bond (bool): 是否含二硫键
+    """
+    is_dimer_flag = detect_dimer(smiles)
+
+    return {
+        "is_monomer": not is_dimer_flag,
+        "is_dimer": is_dimer_flag,
+        "is_cyclic": detect_cyclic(smiles),
+        "has_disulfide_bond": detect_disulfide(smiles),
+    }
 

@@ -45,7 +45,11 @@ feature_extraction/
 ├── outputs/
 │   ├── features/         # NPZ files with extracted features
 │   ├── figures/          # EDA visualization plots
-│   └── class_distribution/  # Class distribution summaries
+│   ├── class_distribution/  # Class distribution summaries
+│   └── model_results/    # Machine learning results
+│       ├── cv_results/   # Cross-validation metrics (JSON)
+│       ├── transfer_results/  # Transfer learning metrics (JSON)
+│       └── figures/      # Model performance visualizations
 ├── src/feature_extraction/
 │   ├── featurizer.py     # PeptideFeaturizer class
 │   ├── visualization.py  # DataVisualizer class
@@ -53,12 +57,54 @@ feature_extraction/
 └── scripts/              # Executable scripts
     ├── clean_csv_data.py
     ├── extract_sif_sgf_features.py
+    ├── extract_features.py  # Batch feature extraction
     ├── visualize_data.py
     ├── visualize_class.py
-    └── compare_feature_distributions.py
+    ├── compare_feature_distributions.py
+    ├── train_models.py     # Train ML models with CV
+    ├── evaluate_transfer.py  # Transfer learning evaluation
+    └── visualize_model_results.py  # Model result visualization
 ```
 
 ## Common Workflows
+
+### Complete End-to-End Pipeline
+
+**Typical workflow from raw data to model evaluation:**
+
+```bash
+# Step 1: Clean raw CSV data
+uv run python scripts/clean_csv_data.py \
+    --input data/raw/dataset.csv \
+    --output data/cleaned/dataset_cleaned.csv
+
+# Step 2: Extract features
+uv run python scripts/extract_features.py \
+    --input_dir data/cleaned/ \
+    --output_dir outputs/features/
+
+# Step 3: Visualize data distributions
+uv run python scripts/visualize_data.py \
+    --input_dir outputs/features/ \
+    --output_dir outputs/figures/
+
+# Step 4: Train models with cross-validation
+uv run python scripts/train_models.py \
+    --input_dir outputs/features/ \
+    --output_dir outputs/model_results/cv_results/
+
+# Step 5: Evaluate transfer learning (if multiple datasets)
+uv run python scripts/evaluate_transfer.py \
+    --dataset1 outputs/features/dataset1.npz \
+    --dataset2 outputs/features/dataset2.npz \
+    --output_dir outputs/model_results/transfer_results/
+
+# Step 6: Visualize model results
+uv run python scripts/visualize_model_results.py \
+    --cv_dir outputs/model_results/cv_results/ \
+    --transfer_dir outputs/model_results/transfer_results/ \
+    --output_dir outputs/model_results/figures/
+```
 
 ### 1. Feature Extraction Pipeline
 
@@ -109,6 +155,38 @@ uv run python scripts/clean_csv_data.py \
     --input data/raw/sif_sgf_second.csv \
     --output data/cleaned/sif_sgf_second_cleaned.csv
 ```
+
+### 4. Model Training and Evaluation
+
+**Train models with 5-fold cross-validation:**
+```bash
+uv run python scripts/train_models.py \
+    --input_dir outputs/features/ \
+    --output_dir outputs/model_results/cv_results/ \
+    --n_folds 5
+```
+
+This trains three models (Logistic Regression, Random Forest, XGBoost) for both SIF and SGF targets on each dataset using stratified cross-validation with balanced class weights.
+
+**Evaluate transfer learning between datasets:**
+```bash
+uv run python scripts/evaluate_transfer.py \
+    --dataset1 outputs/features/US9624268_cleaned.npz \
+    --dataset2 outputs/features/sif_sgf_second_cleaned.npz \
+    --output_dir outputs/model_results/transfer_results/
+```
+
+This performs bidirectional transfer learning (train on one dataset, test on another) and handles different class definitions through class mapping.
+
+**Visualize model results:**
+```bash
+uv run python scripts/visualize_model_results.py \
+    --cv_dir outputs/model_results/cv_results/ \
+    --transfer_dir outputs/model_results/transfer_results/ \
+    --output_dir outputs/model_results/figures/
+```
+
+Generates performance comparison charts, transfer learning heatmaps, feature importance plots, and confusion matrices.
 
 ## Core Components
 
@@ -215,6 +293,71 @@ feature_names = npz['feature_names']
 ids = npz['ids']
 ```
 
+### Model Results Format
+
+**Cross-validation results (JSON):**
+```json
+{
+  "dataset_name": "sif_sgf_second",
+  "target": "SIF",
+  "model": "RandomForest",
+  "n_folds": 5,
+  "metrics": {
+    "accuracy": [0.85, 0.87, ...],
+    "precision": [0.83, 0.86, ...],
+    "recall": [0.82, 0.85, ...],
+    "f1": [0.82, 0.85, ...],
+    "auc": [0.90, 0.92, ...]
+  },
+  "mean_metrics": {...},
+  "std_metrics": {...}
+}
+```
+
+**Transfer learning results (JSON):**
+```json
+{
+  "train_dataset": "US9624268",
+  "test_dataset": "sif_sgf_second",
+  "target": "SIF",
+  "model": "XGBoost",
+  "class_mapping": {"0": 0, "1": 1, ...},
+  "metrics": {
+    "accuracy": 0.78,
+    "precision": 0.76,
+    ...
+  },
+  "confusion_matrix": [[...], [...]]
+}
+```
+
+## Machine Learning Pipeline
+
+### Models
+
+Three classification models are trained for both SIF and SGF targets:
+
+1. **Logistic Regression:** Baseline linear model with L2 regularization
+2. **Random Forest:** Ensemble model with 100 trees, good for feature importance
+3. **XGBoost:** Gradient boosting model, typically best performance
+
+**All models use:**
+- `class_weight='balanced'` to handle class imbalance
+- Stratified K-fold cross-validation (default 5 folds)
+- Standard evaluation metrics: accuracy, precision, recall, F1, AUC
+
+### Transfer Learning
+
+The `evaluate_transfer.py` script handles:
+- Training on one dataset, testing on another (bidirectional)
+- Class mapping for datasets with different class definitions (e.g., 5-class vs 4-class)
+- Automatic handling of incompatible class spaces
+
+**Class mapping example:**
+- Dataset 1 has classes: [0, 1, 2, 3, 4]
+- Dataset 2 has classes: [0, 1, 2, 3]
+- Mapping: {0: 0, 1: 1, 2: 2, 3: 3, 4: 3} (collapse 4 into 3)
+
 ## Key Implementation Details
 
 ### Missing Label Handling
@@ -286,8 +429,13 @@ This project supports peptide stability modeling in simulated gastrointestinal f
 - `feature_extraction.log`: Feature extraction details
 - `visualization.log`: Visualization generation details
 - `visualize_class.log`: Class distribution analysis
+- `train_models.log`: Model training and cross-validation
+- `evaluate_transfer.log`: Transfer learning evaluation
+- `visualize_model_results.log`: Model result visualization
 
 **Common issues:**
 - Avalon not available: Check RDKit build, set `use_avalon=False`
 - Invalid SMILES: Check `mask_valid` array in NPZ output
 - Missing features: Verify feature names match between extraction and visualization
+- Class imbalance warnings: Models use `class_weight='balanced'` by default
+- Transfer learning failures: Check class mapping compatibility between datasets
