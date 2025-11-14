@@ -1,0 +1,23 @@
+{
+  "train_dataset": "sif_sgf_second",
+  "test_dataset": "US9809623B2",
+  "model": "lr",
+  "n_train": 558,
+  "n_test": 76,
+  "accuracy": 0.35526315789473684,
+  "precision": 0.8,
+  "recall": 0.07692307692307693,
+  "f1": 0.14035087719298245,
+  "confusion_matrix": [
+    [
+      23,
+      1
+    ],
+    [
+      48,
+      4
+    ]
+  ],
+  "auc": 0.6137820512820512,
+  "target": "SIF"
+}
