@@ -32,7 +32,8 @@
       "Bash(python3:*)",
       "Bash(tee:*)",
       "Bash(for notebook in notebooks/Phase{1,2,3}_executed.ipynb)",
-      "Bash(do echo \"=== $notebook ===\")"
+      "Bash(do echo \"=== $notebook ===\")",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

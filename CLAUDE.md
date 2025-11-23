@@ -64,24 +64,18 @@ feature_extraction/
 │   ├── Phase2_数据可视化.ipynb        # Interactive Phase 2 workflow
 │   ├── Phase3_模型验证.ipynb          # Interactive Phase 3 workflow
 │   └── README.md                      # Notebooks usage guide
-├── scripts/              # Executable scripts for automation
+├── scripts/              # Executable scripts for batch processing & automation
 │   ├── clean_csv_data.py              # Data cleaning
 │   ├── add_molecular_features.py      # Add dimer/cyclic/disulfide features
 │   ├── extract_sif_sgf_features.py    # Single file feature extraction
 │   ├── extract_features.py            # Batch feature extraction
-│   ├── visualize_data.py              # Basic EDA visualizations
-│   ├── visualize_class.py             # Class distribution analysis
-│   ├── compare_feature_distributions.py  # Compare features across datasets
 │   ├── phase1_visualize.py            # Phase 1 feature quality validation
-│   ├── visualize_within_patent.py     # Phase 2 within-patent analysis
-│   ├── visualize_between_patents.py   # Phase 2 between-patent comparison
-│   ├── generate_phase2_report.py      # Auto-generate Phase 2 report
 │   ├── binary_classification.py       # Phase 3 binary classification modeling
 │   ├── train_models.py                # Multi-class model training with CV
 │   ├── evaluate_transfer.py           # Transfer learning evaluation
-│   ├── visualize_model_results.py     # Model result visualization
-│   ├── visualize_phase3_results.py    # Phase 3 comprehensive visualization
+│   ├── generate_phase2_report.py      # Auto-generate Phase 2 report
 │   └── generate_phase3_report.py      # Auto-generate Phase 3 report
+│   # Note: Visualization scripts removed - use Jupyter Notebooks instead
 └── docs/
     ├── dev/                           # Development documentation
     │   ├── 项目进度.md                # Project progress tracker
@@ -168,19 +162,10 @@ uv run python scripts/phase1_visualize.py \
 
 **Phase 2: Data Visualization (数据可视化)**
 ```bash
-# Within-patent analysis (monomer vs dimer, structural features)
-uv run python scripts/visualize_within_patent.py \
-    --processed_dir data/processed/ \
-    --features_dir outputs/features/ \
-    --output_dir outputs/figures/phase2/within_patent/
+# Use Jupyter Notebook for interactive visualization
+uv run jupyter notebook notebooks/Phase2_数据可视化.ipynb
 
-# Between-patent comparison (PCA, t-SNE, label distributions)
-uv run python scripts/visualize_between_patents.py \
-    --processed_dir data/processed/ \
-    --features_dir outputs/features/ \
-    --output_dir outputs/figures/phase2/between_patents/
-
-# Generate comprehensive Phase 2 report
+# Or generate report via script
 uv run python scripts/generate_phase2_report.py \
     --figures_dir outputs/figures/phase2/ \
     --output_dir docs/dev/
@@ -188,18 +173,16 @@ uv run python scripts/generate_phase2_report.py \
 
 **Phase 3: Model Validation (模型验证)**
 ```bash
-# Binary classification with cross-validation and transfer learning
+# Use Jupyter Notebook for interactive model training and validation
+uv run jupyter notebook notebooks/Phase3_模型验证.ipynb
+
+# Or run batch training via script
 uv run python scripts/binary_classification.py \
     --processed_dir data/processed/ \
     --features_dir outputs/features/ \
     --output_dir outputs/model_results/phase3_binary/ \
     --n_folds 5 \
     --use_gpu
-
-# Visualize Phase 3 results (confusion matrices, feature importance, heatmaps)
-uv run python scripts/visualize_phase3_results.py \
-    --results_dir outputs/model_results/phase3_binary/ \
-    --output_dir outputs/figures/phase3/
 
 # Generate comprehensive Phase 3 report
 uv run python scripts/generate_phase3_report.py \
@@ -209,7 +192,7 @@ uv run python scripts/generate_phase3_report.py \
 
 ### Legacy Multi-Class Pipeline
 
-**For original multi-class classification workflow:**
+**For original multi-class classification workflow (via scripts):**
 
 ```bash
 # Step 1: Clean raw CSV data
@@ -222,27 +205,19 @@ uv run python scripts/extract_features.py \
     --input_dir data/cleaned/ \
     --output_dir outputs/features/
 
-# Step 3: Visualize data distributions
-uv run python scripts/visualize_data.py \
-    --input_dir outputs/features/ \
-    --output_dir outputs/figures/
-
-# Step 4: Train models with cross-validation
+# Step 3: Train models with cross-validation
 uv run python scripts/train_models.py \
     --input_dir outputs/features/ \
-    --output_dir outputs/model_results/cv_results/
+    --output_dir outputs/model_results/cv_results/ \
+    --n_folds 5
 
-# Step 5: Evaluate transfer learning (if multiple datasets)
+# Step 4: Evaluate transfer learning (if multiple datasets)
 uv run python scripts/evaluate_transfer.py \
     --dataset1 outputs/features/dataset1.npz \
     --dataset2 outputs/features/dataset2.npz \
     --output_dir outputs/model_results/transfer_results/
 
-# Step 6: Visualize model results
-uv run python scripts/visualize_model_results.py \
-    --cv_dir outputs/model_results/cv_results/ \
-    --transfer_dir outputs/model_results/transfer_results/ \
-    --output_dir outputs/model_results/figures/
+# Note: For visualization, use Jupyter Notebooks (Phase2, Phase3)
 ```
 
 ### 1. Feature Extraction Pipeline
@@ -263,27 +238,13 @@ uv run python scripts/extract_features.py \
 
 ### 2. Data Visualization
 
-**Generate EDA plots from NPZ files:**
+**Use Jupyter Notebooks for interactive visualization:**
 ```bash
-uv run python scripts/visualize_data.py \
-    --input_dir outputs/features/ \
-    --output_dir outputs/figures/ \
-    --dpi 300 \
-    --format png
-```
+# Phase 2: Data visualization and analysis
+uv run jupyter notebook notebooks/Phase2_数据可视化.ipynb
 
-**Visualize class distribution:**
-```bash
-uv run python scripts/visualize_class.py \
-    --input outputs/features/sif_sgf_second.npz \
-    --output_dir outputs/class_distribution/
-```
-
-**Compare feature distributions:**
-```bash
-uv run python scripts/compare_feature_distributions.py \
-    --input_dir outputs/features/ \
-    --output_dir outputs/figures/
+# Phase 3: Model results visualization
+uv run jupyter notebook notebooks/Phase3_模型验证.ipynb
 ```
 
 ### 3. Data Cleaning
@@ -691,18 +652,17 @@ This project supports peptide stability modeling in simulated gastrointestinal f
 
 ### When debugging:
 
-**Check log files in project root:**
-- `feature_extraction.log`: Feature extraction details
-- `visualization.log`: Visualization generation details
-- `visualize_class.log`: Class distribution analysis
-- `train_models.log`: Model training and cross-validation
+**Log files:**
+Scripts generate log files in the project root when executed:
+- `add_molecular_features.log`: Molecular feature detection
+- `extract_features.log`: Feature extraction details
+- `binary_classification.log`: Binary classification training
+- `train_models.log`: Multi-class model training
 - `evaluate_transfer.log`: Transfer learning evaluation
-- `visualize_model_results.log`: Model result visualization
-- `add_molecular_features.log`: Phase 1 molecular feature detection
-- `visualize_within_patent.log`: Phase 2 within-patent analysis
-- `visualize_between_patents.log`: Phase 2 between-patent comparison
-- `binary_classification.log`: Phase 3 binary classification
-- `visualize_phase3_results.log`: Phase 3 result visualization
+- `generate_phase2_report.log`: Phase 2 report generation
+- `generate_phase3_report.log`: Phase 3 report generation
+
+**Note:** Visualization logs removed - Jupyter Notebooks provide inline output instead
 
 **Common issues:**
 - Avalon not available: Check RDKit build, set `use_avalon=False`
